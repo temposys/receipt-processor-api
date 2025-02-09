@@ -8,10 +8,12 @@ services:
       - "8.8.8.8"
     container_name: rp-node
     working_dir: /var/www/html
-    platform: linux/arm64/v8
+# set manually if needed
+#    platform: linux/arm64/v8
     stdin_open: true
     tty: true
     volumes:
       - "./:/var/www/html"
     ports:
       - "3080:3080"
+    entrypoint: ["/var/www/html/entrypoint.sh"]
