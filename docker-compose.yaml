@@ -14,16 +14,4 @@ services:
     volumes:
       - "./:/var/www/html"
     ports:
-      - "9050:9050"
       - "3080:3080"
-      - "8080:8080"
-    networks:
-      rpnet:
-        ipv4_address: 192.168.211.20
-
-networks:
-  rpnet:
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.211.0/24
