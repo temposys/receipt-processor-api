@@ -15,5 +15,6 @@ services:
     volumes:
       - "./:/var/www/html"
     ports:
+      - "9050:9050"
       - "3080:3080"
     entrypoint: ["/var/www/html/entrypoint.sh"]

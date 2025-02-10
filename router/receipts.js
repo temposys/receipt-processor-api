@@ -55,7 +55,7 @@ routes.post('/process', [
         .withMessage('Price must be in format 0.00.'),
 ], (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    if (!errors.isEmpty() || !totalIsRight(req.body.items, req.body.total)) {
         // console.log(errors);
         return res.status(400).json({ message: "The receipt is invalid." });
     }
@@ -127,6 +127,16 @@ function calculatePoints(receipt) {
     }
 
     return points;
+}
+
+function totalIsRight(items, total) {
+    let controlTotal = 0.00;
+
+    for (let item of items) {
+        controlTotal += parseFloat(item.price);
+    }
+
+    return parseFloat(total) === controlTotal;
 }
 
 module.exports.routes = routes;
