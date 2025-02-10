@@ -1,4 +1,6 @@
 openapi: 3.0.3
+servers:
+  - url: http://localhost:3080
 info:
   title: Receipt Processor
   description: A simple receipt processor

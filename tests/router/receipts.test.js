@@ -1,17 +1,17 @@
 const request = require('supertest');
-const app = require('../app'); // Импортируем приложение без запуска
+const app = require('../../app');
 
 let server;
 
 beforeAll(() => {
-    const port = 5090; // Отдельный порт для тестов
+    const port = 5090;
     server = app.listen(port, () => {
         console.log(`Test server running on port ${port}`);
     });
 });
 
 afterAll((done) => {
-    server.close(done); // Закрываем сервер после тестов
+    server.close(done);
 });
 
 describe("POST /receipts/process", () => {
@@ -20,7 +20,7 @@ describe("POST /receipts/process", () => {
             .post("/receipts/process")
             .send({
                 retailer: "Test",
-                purchaseDate: "2022-01-01",
+                purchaseDate: "2025-01-01",
                 purchaseTime: "13:01",
                 total: "35.35",
                 items: [{ shortDescription: "Item1", price: "35.35" }],
@@ -33,7 +33,7 @@ describe("POST /receipts/process", () => {
     it("should return 400 if purchaseDate is invalid", async () => {
         const requestBody = {
             retailer: "Test",
-            purchaseDate: "2022-01-99", // wrong date
+            purchaseDate: "2025-01-99", // wrong date
             purchaseTime: "15:03",
             total: "20.00",
             items: [{ shortDescription: "Item1", price: "20.00" }],
@@ -100,6 +100,15 @@ describe("POST /receipts/process", () => {
             total: "40.15",
             items: [{ shortDescription: "Item1", price: "40.15" }],
         };
+
+        const res = await request(server).post("/receipts/process").send(requestBody);
+
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("The receipt is invalid.");
+    });
+
+    it("should return 400 if empty request", async () => {
+        const requestBody = {};
 
         const res = await request(server).post("/receipts/process").send(requestBody);
 
