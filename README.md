@@ -15,7 +15,16 @@ docker compose -p rp up -d
 This will build and run docker containers needed.
 
 Now you are able to test API calls on http://localhost:3080
-You can use api.yml file to test it, server url is added there.
+You can use `api.yml` file to test it, server url is added there.
+
+### Unit tests
+
+To run tests: 
+go to `rp-node` container
+```shell
+docker exec -it rp-node /bin/sh
+```
+and run `npm test`
 
 # API Specification
 

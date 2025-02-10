@@ -4,7 +4,7 @@ const app = require('../../app');
 let server;
 
 beforeAll(() => {
-    const port = 5090;
+    const port = process.env.PORT || 5090;
     server = app.listen(port, () => {
         console.log(`Test server running on port ${port}`);
     });
