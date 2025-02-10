@@ -1,5 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const { randomUUID } = require('crypto');
 const routes = express.Router();
 
 let receipts = [];
@@ -58,18 +59,30 @@ routes.post('/process', [
         console.log(errors);
         return res.status(400).json({ message: "The receipt is invalid." });
     }
-    res.send('No Errors!')
+
+    const newReceipt = {
+        "id": randomUUID(),
+        "retailer": req.body.retailer,
+        "purchaseDate": req.body.purchaseDate,
+        "purchaseTime": req.body.purchaseTime,
+        "total": req.body.total,
+        "items": req.body.items
+    };
+
+    receipts.push(newReceipt);
+
+    return res.send({"id": newReceipt.id});
 })
 
 routes.get('/:id/points',function (req, res) {
     let id = req.params.id;
+    console.log(id);
 
-    const receipt = receipts.filter((receipt) => {
-        return receipts.id === id;
-    })[0];
+    const receipt = receipts.find(receipt => receipt.id === id);
 
-    if (receipt) {
-        return res.send(JSON.stringify(receipt,null,4));
+    if (receipt !== undefined) {
+        console.log(receipt);
+        return res.send(receipt);
     } else {
         res.status(404).json({message: "No receipt found for that ID."});
     }
